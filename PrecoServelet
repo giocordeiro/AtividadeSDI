@@ -1,0 +1,32 @@
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import java.io.*;
+import org.json.JSONObject;
+public class PrecoServlet extends HttpServlet {
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+throws ServletException, IOException {
+BufferedReader reader = request.getReader();
+StringBuilder jsonBuilder = new StringBuilder();
+String line;
+while ((line = reader.readLine()) != null) {
+jsonBuilder.append(line);
+}
+JSONObject input = new JSONObject(jsonBuilder.toString());
+String produto = input.getString("produto");
+int quantidade = input.getInt("quantidade");
+double precoUnitario;
+switch (produto) {
+case "ABC": precoUnitario = 9.99; break;
+case "XYZ": precoUnitario = 19.50; break;
+case "DEF": precoUnitario = 14.75; break;
+default: precoUnitario = 0.0;
+}
+double total = precoUnitario * quantidade;
+response.setContentType("application/json");
+PrintWriter out = response.getWriter();
+JSONObject output = new JSONObject();
+output.put("preco", String.format("%.2f", total));
+out.print(output.toString());
+out.flush();
+}
+}

@@ -1,1 +1,18 @@
-
+from flask import Flask, request, jsonify
+app = Flask(__name__)
+# Preços fictícios para exemplo
+tabela_precos = {
+"ABC": 9.99,
+"XYZ": 19.50,
+"DEF": 14.75
+}
+@app.route('/preco', methods=['POST'])
+def calcular_preco():
+dados = request.get_json()
+produto = dados.get("produto")
+quantidade = dados.get("quantidade")
+preco_unitario = tabela_precos.get(produto, 0)
+total = preco_unitario * quantidade
+return jsonify({"preco": round(total, 2)})
+if __name__ == '__main__':
+app.run(debug=True)

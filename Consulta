@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Consulta de Preço</title>
+</head>
+<body>
+<h2>Preço do Produto</h2>
+<form onsubmit="enviarDados(event)">
+Produto: <input id="produto" type="text"><br>
+Quantidade: <input id="quantidade" type="number"><br>
+<button type="submit">Consultar</button>
+</form>
+<p id="resultado"></p>
+<script>
+function enviarDados(event) {
+event.preventDefault();
+const produto = document.getElementById('produto').value;
+const quantidade = parseInt(document.getElementById('quantidade').value);
+fetch("http://localhost:5000/preco", {
+method: "POST",
+headers: {"Content-Type": "application/json"},
+body: JSON.stringify({produto, quantidade})
+})
+.then(res => res.json())
+.then(data => {
+document.getElementById("resultado").innerText = "Preço total: R$ " + data.preco;
+});
+}
+</script>
+</body>
+</html>
